@@ -1,0 +1,26 @@
+---
+- hosts: samba
+  become: yes
+  roles:
+    - bertvv.samba
+  vars_files:
+    - group_vars/users.yml
+  vars:
+    samba_users:
+      - name: "{{samba_username}}"
+        password: "{{samba_password}}"
+    samba_shares_root: /srv/piratecove
+    samba_shares:
+      - name: piratecove
+        comment: 'This is where our pirate files go'
+        group: pirateship
+        write_list: +pirateship
+  tasks:
+    - name: Ensure package database is up-to-date
+      apt:
+        update-cache: yes
+      when: ansible_os_family == 'Debian'
+    - name: make samba group
+      group: name=pirateship state=present
+    - name: Make the samba user
+      user: name="{{samba_username}}" comment='For samba file access'  group='pirateship'

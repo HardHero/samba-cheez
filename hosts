@@ -1,0 +1,2 @@
+[samba]
+samba-cheez ansible_host=192.168.1.15 ansible_user=cheez ansible_ssh_private_key_file=~/.ssh/crowley.cloud/ec3-lab
